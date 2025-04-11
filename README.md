@@ -6,6 +6,9 @@ A userscript that adds an "Unddit" button to Reddit's navigation bar that lets y
 ![License](https://img.shields.io/github/license/nazdridoy/Reddit-Unddit-Undelete)
 ![Version](https://img.shields.io/badge/version-1.7.0-blue)
 
+## 📸 Preview
+![2025-04-11_05-57-19](https://github.com/user-attachments/assets/09a8308b-e2b3-4a85-84ea-01c2715319e0)
+
 ## 🔍 Features
 
 - 🔄 One-click redirection to Unddit (undelete.pullpush.io)
