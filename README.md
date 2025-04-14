@@ -2,6 +2,9 @@
 
 A userscript that adds an "Unddit" button to Reddit's navigation bar that lets you quickly view deleted and removed comments/posts on undelete.pullpush.io with one click. Recover deleted Reddit content easily.
 
+[![Install Reddit Unddit Undelete](https://img.shields.io/badge/Install-Reddit%20Unddit%20Undelete-brightgreen?style=for-the-badge)](https://greasyfork.org/en/scripts/532477-reddit-unddit-undelete)
+
+
 ![Reddit Unddit Undelete](https://img.shields.io/badge/Reddit-Unddit%20Undelete-FF4500)
 ![License](https://img.shields.io/github/license/nazdridoy/Reddit-Unddit-Undelete)
 ![Version](https://img.shields.io/badge/version-1.7.0-blue)
