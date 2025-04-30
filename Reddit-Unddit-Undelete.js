@@ -1,11 +1,12 @@
 // ==UserScript==
 // @name         Reddit Unddit Undelete
 // @namespace    https://github.com/nazdridoy
-// @version      1.7.0
+// @version      1.8.0
 // @description  Adds an "Unddit" button to Reddit's navigation bar that lets you quickly view deleted and removed comments/posts on undelete.pullpush.io with one click. Recover deleted Reddit content easily.
 // @author       nazdridoy
 // @license      MIT
 // @match        https://www.reddit.com/*
+// @match        https://old.reddit.com/*
 // @icon         https://undelete.pullpush.io/images/favicon.ico
 // @grant        GM_addElement
 // @grant        GM_setValue
@@ -48,18 +49,25 @@ SOFTWARE.
     // This script helps users recover deleted content from Reddit by adding a convenient button
     // to the UI that redirects to undelete.pullpush.io (formerly known as unddit)
 
+    // Check if we're on old.reddit.com or www.reddit.com
+    const isOldReddit = window.location.hostname === 'old.reddit.com';
+
     // Observer to watch DOM for dynamic changes
     const observer = new MutationObserver(() => {
         if (!document.getElementById('unddit-button')) {
-            addRedirectButton();
+            if (isOldReddit) {
+                addOldRedditButton();
+            } else {
+                addNewRedditButton();
+            }
         }
     });
 
-    // Function to create and add the button to Reddit's navigation
-    function addRedirectButton() {
+    // Function to create and add the button to new Reddit's navigation
+    function addNewRedditButton() {
         const headerNav = document.querySelector('header.v2 > nav'); // Reddit's main navigation bar
         if (!headerNav) {
-            console.log('[Unddit Redirect] Navigation bar not found.');
+            console.log('[Unddit Redirect] New Reddit navigation bar not found.');
             return;
         }
 
@@ -82,14 +90,52 @@ SOFTWARE.
         button.style.fontWeight = 'bold';
 
         // Click event to redirect to undelete.pullpush.io to see deleted content
-        button.addEventListener('click', () => {
-            const currentUrl = window.location.href;
-            const newUrl = currentUrl.replace('https://www.reddit.com', 'https://undelete.pullpush.io');
-            console.log('[Unddit Redirect] Redirecting to:', newUrl);
-            window.location.href = newUrl;
+        button.addEventListener('click', redirectToUnddit);
+
+        console.log('[Unddit Redirect] Button added to new Reddit:', button);
+    }
+
+    // Function to create and add the button to old Reddit's navigation
+    function addOldRedditButton() {
+        const headerBottomRight = document.getElementById('header-bottom-right');
+        if (!headerBottomRight) {
+            console.log('[Unddit Redirect] Old Reddit header-bottom-right not found.');
+            return;
+        }
+
+        // Create a container for the button that matches the old Reddit style
+        const buttonContainer = document.createElement('span');
+        buttonContainer.id = 'unddit-button-container';
+        buttonContainer.style.marginRight = '8px';
+        buttonContainer.style.display = 'inline-block';
+
+        // Create the Unddit button for quick access to deleted content
+        const button = document.createElement('a');
+        button.id = 'unddit-button';
+        button.textContent = 'Unddit';
+        button.title = 'View deleted comments and posts on undelete.pullpush.io';
+        button.href = '#';
+        button.style.fontWeight = 'bold';
+        button.style.color = '#ff4500'; // Reddit orange
+
+        // Click event to redirect to undelete.pullpush.io to see deleted content
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            redirectToUnddit();
         });
 
-        console.log('[Unddit Redirect] Button added:', button);
+        buttonContainer.appendChild(button);
+        headerBottomRight.insertBefore(buttonContainer, headerBottomRight.firstChild);
+        
+        console.log('[Unddit Redirect] Button added to old Reddit:', button);
+    }
+
+    // Common function to handle the redirect
+    function redirectToUnddit() {
+        const currentUrl = window.location.href;
+        const newUrl = currentUrl.replace(/https:\/\/(www\.|old\.)reddit\.com/, 'https://undelete.pullpush.io');
+        console.log('[Unddit Redirect] Redirecting to:', newUrl);
+        window.location.href = newUrl;
     }
 
     // Start observing the DOM for changes to ensure button appears even with dynamic page loading
@@ -99,11 +145,18 @@ SOFTWARE.
     });
 
     // Add the button immediately in case the nav bar is already loaded
-    addRedirectButton();
+    if (isOldReddit) {
+        addOldRedditButton();
+    } else {
+        addNewRedditButton();
+    }
 
-    // Cleanup observer if Reddit's app structure isn't detected
+    // Cleanup observer if neither Reddit version is detected
     setTimeout(() => {
-        const isRedditApp = document.querySelector('header.v2');
+        const isRedditApp = isOldReddit 
+            ? document.getElementById('header-bottom-right')
+            : document.querySelector('header.v2');
+            
         if (!isRedditApp) {
             observer.disconnect();
             console.log('[Unddit Redirect] Stopped observing: Reddit app not detected.');
