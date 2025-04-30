@@ -10,7 +10,9 @@ A userscript that adds an "Unddit" button to Reddit's navigation bar that lets y
 ![Version](https://img.shields.io/badge/version-1.7.0-blue)
 
 ## 📸 Preview
-![2025-04-11_05-57-19](https://github.com/user-attachments/assets/09a8308b-e2b3-4a85-84ea-01c2715319e0)
+![2025-04-30_18-20-34](https://github.com/user-attachments/assets/a6072b92-542b-4a29-9b7a-225ee4d7091b)
+![2025-04-30_18-20-16](https://github.com/user-attachments/assets/5dc48deb-76af-4512-8b40-8e2089cce35b)
+
 
 ## 🔍 Features
 
